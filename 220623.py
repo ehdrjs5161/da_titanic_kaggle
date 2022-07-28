@@ -1,4 +1,3 @@
-from tkinter import E
 from turtle import pd
 import pandas as pd
 import numpy as np
@@ -7,6 +6,7 @@ import random as rnd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+from sklearn.metrics import accuracy_score
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC, LinearSVC
 from sklearn.ensemble import RandomForestClassifier
@@ -71,19 +71,12 @@ def preprocess(train_df, test_df):
 
     return train_df, test_df
 
-def cal_acc(values, predicts):
-    test_acc = 0
-    for value, pred in zip(values, predicts):
-        if value == pred:
-            test_acc += 1
-    return round(test_acc/len(values)*100, 2)
-
 def logistic_regression(train_x, train_y, test_x, test_y):
     logreg = LogisticRegression()
     logreg.fit(train_x, train_y)
     y_pred = logreg.predict(test_x)
     acc = round(logreg.score(train_x, train_y)*100, 2)
-    test_acc = cal_acc(test_y, y_pred)
+    test_acc = accuracy_score(test_y, y_pred)
     print("----------Logistic Regression Accuracy----------")
     print("acc: ", acc)
     print("test acc: ", test_acc)
@@ -93,7 +86,7 @@ def svm(train_x, train_y, test_x, test_y):
     svc.fit(train_x, train_y)
     y_pred = svc.predict(test_x)
     acc = round(svc.score(train_x, train_y)*100, 2)
-    test_acc = cal_acc(test_y, y_pred)
+    test_acc = accuracy_score(test_y, y_pred)
     print("-------------Support Vector Machine-------------")
     print("acc: ", acc)
     print("test acc: ", test_acc)
@@ -104,14 +97,15 @@ def svc_linear(train_x, train_y, test_x, test_y):
     svc_li.fit(train_x, train_y)
     y_pred = svc_li.predict(test_x)
     acc = round(svc_li.score(train_x, train_y)*100, 2)
-    test_acc = cal_acc(test_y, y_pred)
+    test_acc = accuracy_score(test_y, y_pred)
     print("---------------Linear SVC Accuracy--------------")
     print("acc: ", acc)
     print("test acc: ", test_acc)
+    
 if __name__ == "__main__":
-    train = pd.read_csv("da_titanic_kaggle/titanic/train.csv")
-    test_x = pd.read_csv("da_titanic_kaggle/titanic/test.csv")
-    test_y = pd.read_csv("da_titanic_kaggle/titanic/gender_submission.csv")
+    train = pd.read_csv("titanic/train.csv")
+    test_x = pd.read_csv("titanic/test.csv")
+    test_y = pd.read_csv("titanic/gender_submission.csv")
 
     temp = pd.concat([test_x, test_y], axis=1)
 
